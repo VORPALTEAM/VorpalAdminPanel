@@ -1,3 +1,4 @@
+import Cabinet from 'components/cabinet';
 import LoginForm from 'components/login';
 import NotifyContainer from 'components/notify';
 import React, { useState, useEffect} from 'react';
@@ -21,7 +22,11 @@ function App() {
 
   return (
     <div className="App">
+        {
+        State.isAuth ? 
+        <Cabinet /> :
         <LoginForm />
+        }
         <NotifyContainer />
     </div>
   );

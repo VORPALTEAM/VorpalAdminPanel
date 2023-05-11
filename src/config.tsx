@@ -2,10 +2,24 @@ import { notifyList } from "types"
 
 export const API_URL = "http://staging-api.vorpal.finance/api"
 
+export const NOTIFY_LIFETIME = 6000
+
 export const testAdminKeys : string[] = [
-    "0x0779ffA4EA4B23260065ddcB10f4d88Be9E29a32",
-    "0x952659fe47B9AE12aeD206F3FfaDCAa4c3659589"
+    "0x0779ffa4ea4b23260065ddcb10f4d88be9e29a32",
+    "0x952659fe47b9ae12aed206f3ffadcaa4c3659589"
 ]
+
+export const connectOptions = {
+    keepAlive: true,
+    withCredentials: false,
+    timeout: 20000, // ms
+    headers: [
+        {
+            name: 'Access-Control-Allow-Origin',
+            value: '*'
+        }
+    ]
+  }
 
 export const testContents = {
     menu: {},

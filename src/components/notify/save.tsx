@@ -1,12 +1,27 @@
-import { OkMessages, notifyNames } from 'config';
+import { NOTIFY_LIFETIME, OkMessages, notifyNames } from 'config';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
+import { actions } from 'state/reducer';
 
 
 const Save = () => {
+    
+    const dispatch = useDispatch()
+
+    const CloseWindow = () => {
+        dispatch(actions.notify(notifyNames.none))
+    }
+
+    useEffect(()=> {
+        setTimeout(CloseWindow, NOTIFY_LIFETIME)
+    }, [])
+
     return(
         <div className="notify--window window--success">
-            {OkMessages.saved || "Success"}
+            <div className="notify--message">
+                {OkMessages.saved || "Success"}
+            </div>
+            <div className="close--icon" onClick={CloseWindow} />
         </div>
     )
 }
