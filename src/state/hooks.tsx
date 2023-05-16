@@ -33,10 +33,23 @@ async function CheckAuth (signature : string) {
     const msgstring = 'getcontent_' + String(timeMark)
     const hash : string = sha256(msgstring)
     const web3 = new Web3(env)
-    const recover = web3.eth.accounts.recover(hash, signature).toLowerCase()
-    console.log(recover)
-    console.log(config.testAdminKeys.indexOf(recover))
-    return config.testAdminKeys.indexOf(recover) > -1 ? true : false
+    console.log(JSON.stringify({
+      filter: "All",
+      signature:  signature
+    }))
+    const authResult = await fetch(config.API_URL + '/admin/requestdata', {
+      method: "POST",
+      headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+         filter: "All",
+         signature:  signature
+       })
+    })
+    const response = await authResult.json()
+    return response.ok ? true : false
     // Request to api will be here
 }
 
