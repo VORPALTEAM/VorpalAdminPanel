@@ -50,10 +50,17 @@ async function CheckAuth (signature : string) {
        })
     })
     const response = await authResult.json()
-    const content : keyList  = response.data.content
-
-    store.dispatch(actions.keys(content))
+    const content : keyList  = []
     
+    response.data.content.map((item) => {
+      content.push({
+         _key: item.key,
+         value: item.value
+      })
+    })
+     
+    store.dispatch(actions.keys(content))
+
     return response.data.success ? true : false
     // Request to api will be here
 }
