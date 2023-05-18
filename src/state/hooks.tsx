@@ -49,7 +49,8 @@ async function CheckAuth (signature : string) {
        })
     })
     const response = await authResult.json()
-    return response.ok ? true : false
+
+    return response.data.success ? true : false
     // Request to api will be here
 }
 
@@ -72,6 +73,7 @@ export async function AuthUser () {
    }
 
    const isValid = await CheckAuth (signature)
+
    if ( isValid ) {
       store.dispatch(actions.setIsAuth(true))
       store.dispatch(actions.notify(config.notifyNames.authok))

@@ -1,6 +1,6 @@
 import { notifyList } from "types"
 
-export const API_URL = process.env.API_URL
+export const API_URL = process.env.API_URL || "https://staging-api.vorpal.finance/api"
 
 export const NOTIFY_LIFETIME = 6000
 
