@@ -9,6 +9,15 @@ export type notifyList = {
     none: notifyNames
 }
 
+export type keyList = {
+    key: string,
+    value: string
+}[]
+
+export type keyListAction = {
+    type: string,
+    payload: keyList
+}
 export type booleanAction = {
     type: string,
     payload: boolean

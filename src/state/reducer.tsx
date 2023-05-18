@@ -5,13 +5,17 @@ import * as types from 'types'
 const actionNames = {
     auth: "AUTH",
     notify: "NOTIFY",
-    address: "ADDRESS"
+    address: "ADDRESS",
+    keys: "KEYS"
 }
+
+const processingKeys : types.keyList = []
 
 export const actions = {
     setIsAuth: createAction<boolean>(actionNames.auth),
     setAddress: createAction<string>(actionNames.address),
-    notify: createAction<types.notifyNames>(actionNames.notify)
+    notify: createAction<types.notifyNames>(actionNames.notify),
+    keys: createAction<types.keyList>(actionNames.keys)
 }
 
 const SetIsAuth = (state = false, action: types.booleanAction) => {
@@ -41,10 +45,20 @@ const SetAddress = (state = '', action: types.stringAction) => {
       }
 }
 
+const EditKeys = (state = processingKeys, action: types.keyListAction) => {
+  switch(action.type) {
+    case actionNames.keys : 
+      return action.payload
+    default :
+      return state
+  }
+}
+
 export const RootReducer = combineReducers ({
     isAuth: SetIsAuth,
     notify: SelectNotify,
-    address: SetAddress
+    address: SetAddress,
+    keys: EditKeys
 })
 
 export type RootState = ReturnType<typeof RootReducer>
