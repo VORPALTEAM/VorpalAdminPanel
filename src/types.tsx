@@ -9,10 +9,12 @@ export type notifyList = {
     none: notifyNames
 }
 
-export type keyList = {
-    key: string,
+export type keyItem = {
+    _key: string,
     value: string
-}[]
+}
+
+export type keyList = keyItem[]
 
 export type keyListAction = {
     type: string,

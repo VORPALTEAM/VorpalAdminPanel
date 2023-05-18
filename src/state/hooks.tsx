@@ -3,6 +3,7 @@ import * as config from '../config'
 import Web3 from 'web3';
 import { actions } from './reducer';
 import sha256 from 'sha256'
+import { keyList } from 'types';
 
 declare global {
     interface Window {
@@ -49,7 +50,10 @@ async function CheckAuth (signature : string) {
        })
     })
     const response = await authResult.json()
+    const content : keyList  = response.data.content
 
+    store.dispatch(actions.keys(content))
+    
     return response.data.success ? true : false
     // Request to api will be here
 }
