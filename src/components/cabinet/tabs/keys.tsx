@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, actions } from 'state/reducer';
 import KeyRow from './components/keyrow';
@@ -6,11 +6,16 @@ import { keyList } from 'types';
 
 const KeysTab = () => {
 
-    
+    const [additionalName, UpdateAddName] = useState("")
     const State = useSelector((state: RootState) => {
        return state
     })
     const dispatch = useDispatch()
+
+    const NewKeyName = (event : any) => {
+         const newName = event.target.value
+         UpdateAddName(newName)
+    }
 
     const AppendKey = () => {
         const newList : keyList = []
@@ -18,7 +23,7 @@ const KeysTab = () => {
             newList.push(k)
         })
         newList.push({
-            _key: "",
+            _key: additionalName,
             value: ""
         })
         dispatch(actions.keys(newList))
@@ -31,6 +36,7 @@ const KeysTab = () => {
                 return <KeyRow _key={item._key} value={item.value} />
             })}
             <div className="append--row">
+                <input type="text" value={additionalName} onChange={NewKeyName} />
                 <button onClick={AppendKey}>
                     Append key
                 </button>
