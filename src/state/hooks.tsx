@@ -95,7 +95,55 @@ export async function AuthUser () {
 
 }
 
+/* 
+
+    {
+      signatire: '',
+      data: keyList
+    }
+
+*/
+
 export async function DispatchData ( newData : keyList) {
-   console.log(newData)
-   return true
+   if (!env) {
+      return false
+   }
+
+   const signedData = JSON.stringify(newData)
+   const dt = new Date().getTime()
+   const timeMark = dt - (dt % 600000)
+   const signableMsg = `${signedData}${timeMark}`
+   const accs = await env.request({ method: "eth_requestAccounts" }, config.connectOptions)
+   const hash : string = sha256( signableMsg )
+   const web3 = new Web3(env)
+   let signature = ''
+   try {
+
+      signature = await web3.eth.personal.sign(hash, accs[0], '')
+
+   } catch (e) {
+      store.dispatch(actions.notify('savefail'))
+      return false
+   }
+   
+   const saveResult = await fetch(config.API_URL + '/admin/savedata', {
+      method: "POST",
+      headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+         signature: signature,
+         data: newData
+       })
+    })
+   const result = await saveResult.json()
+   console.log(result)
+   if (result.success) {
+      store.dispatch(actions.notify('saveok'))
+      return true
+   } else {
+      store.dispatch(actions.notify('savefail'))
+      return false
+   }
 }
