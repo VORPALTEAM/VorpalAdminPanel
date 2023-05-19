@@ -94,3 +94,8 @@ export async function AuthUser () {
    }
 
 }
+
+export async function DispatchData ( newData : keyList) {
+   console.log(newData)
+   return true
+}

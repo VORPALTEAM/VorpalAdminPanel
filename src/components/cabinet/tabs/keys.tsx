@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState, actions } from 'state/reducer';
 import KeyRow from './components/keyrow';
 import { keyList } from 'types';
+import { DispatchData } from 'state/hooks';
 
 const KeysTab = () => {
 
@@ -29,6 +30,10 @@ const KeysTab = () => {
         dispatch(actions.keys(newList))
     }
 
+    const SaveData = () => {
+        DispatchData(State.keys)
+    }
+
     return(
         <div className="admin--tab keys--tab">
             {State.keys.map((item) => {
@@ -40,7 +45,11 @@ const KeysTab = () => {
                 <button onClick={AppendKey}>
                     Append key
                 </button>
-                
+            </div>
+            <div className="save--data--row">
+                <button className="save--btn" onClick={SaveData}>
+                    Save
+                </button>
             </div>
         </div>
     )
