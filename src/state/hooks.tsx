@@ -52,6 +52,10 @@ async function CheckAuth (signature : string) {
     })
     const response = await authResult.json()
     const content : keyList  = []
+
+    if (!response.data.success) {
+        return false
+    }
     
     response.data.content.map((item) => {
       content.push({
