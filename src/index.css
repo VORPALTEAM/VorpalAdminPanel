@@ -101,5 +101,9 @@ body {
   align-items: center;
 }
 
+.to--delete {
+  background: #F00;
+}
+
 
 

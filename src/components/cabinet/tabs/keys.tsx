@@ -31,13 +31,13 @@ const KeysTab = () => {
     }
 
     const SaveData = () => {
-        DispatchData(State.keys)
+        DispatchData(State.keys, State.deletions)
     }
 
     return(
         <div className="admin--tab keys--tab">
-            {State.keys.map((item) => {
-                return <KeyRow _key={item._key} value={item.value} />
+            {State.keys.map((item, index) => {
+                return <KeyRow key={`rw_`.concat(String(index * 3))} _key={item._key} value={item.value} />
             })}
             <div className="append--row">
                 <input type="text" value={additionalName} onChange={NewKeyName} />

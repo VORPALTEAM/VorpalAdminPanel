@@ -30,6 +30,11 @@ export type stringAction = {
     payload: string
 }
 
+export type stringArrAction = {
+    type: string,
+    payload: string[]
+}
+
 export type numberAction = {
     type: string,
     payload: number

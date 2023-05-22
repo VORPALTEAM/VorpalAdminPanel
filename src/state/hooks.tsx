@@ -111,7 +111,7 @@ export async function AuthUser () {
 
 */
 
-export async function DispatchData ( newData : keyList) {
+export async function DispatchData ( newData : keyList, dels: string[]) {
    if (!env) {
       return false
    }
@@ -149,7 +149,8 @@ export async function DispatchData ( newData : keyList) {
       body: JSON.stringify({
          signature: signature,
          message: signedData,
-         data: newData
+         data: newData,
+         deletions: dels
        })
     })
    const result = await saveResult.json()
