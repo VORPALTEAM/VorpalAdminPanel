@@ -116,7 +116,7 @@ export async function DispatchData ( newData : keyList) {
       return false
    }
 
-   const signedData = generateRandomString (16) // JSON.stringify(newData)
+   const signedData =  generateRandomString (16) // generateRandomString (16) // JSON.stringify(newData)
    const msg = GenerateAuthMessage (signedData)
 
    const web3 = new Web3(env)
@@ -126,7 +126,7 @@ export async function DispatchData ( newData : keyList) {
    let signature = ''
 
    try {
-
+      console.log(msg)
       signature = await web3.eth.personal.sign(msg, accs[0], '')
 
    } catch (e) {
@@ -154,7 +154,7 @@ export async function DispatchData ( newData : keyList) {
     })
    const result = await saveResult.json()
    console.log(result)
-   if (result.success) {
+   if (result.data.success) {
       store.dispatch(actions.notify('saveok'))
       return true
    } else {
