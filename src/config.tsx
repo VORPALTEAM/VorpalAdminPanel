@@ -42,7 +42,7 @@ export const ErrMessages = {
     nometamask: "You need metamask to access this service",
     norights: "User have no rights to access",
     unavailable: "Cannot connect with vorpal server",
-    unsaved: "Failed to save data: invalid signature of wrong keys"
+    unsaved: "Failed to save data: invalid signature or a wrong keys"
 }
 
 export const OkMessages = {

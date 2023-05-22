@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import { actions } from './reducer';
 import sha256 from 'sha256'
 import { keyList } from 'types';
+import { generateRandomString } from './utils';
 
 declare global {
     interface Window {
@@ -19,10 +20,10 @@ function RejectAuth () {
   return false
 }
 
-function GenerateAuthMessage () {
+function GenerateAuthMessage (msg = 'getcontent_') {
      const dt = new Date().getTime()
      const timeMark = dt - (dt % 600000)
-     const msgstring = 'getcontent_' + String(timeMark)
+     const msgstring = msg + String(timeMark)
     // console.log(msgstring) 
      const hash : string = sha256(msgstring)
      return hash;
@@ -82,6 +83,8 @@ export async function AuthUser () {
    } catch (e) {
       return RejectAuth ()
    }
+   console.log(msg)
+   console.log(signature)
 
    const isValid = await CheckAuth (signature)
 
@@ -109,22 +112,29 @@ export async function DispatchData ( newData : keyList) {
       return false
    }
 
-   const signedData = JSON.stringify(newData)
-   const dt = new Date().getTime()
-   const timeMark = dt - (dt % 600000)
-   const signableMsg = `${signedData}${timeMark}`
-   const accs = await env.request({ method: "eth_requestAccounts" }, config.connectOptions)
-   const hash : string = sha256( signableMsg )
+   const signedData = generateRandomString (16) // JSON.stringify(newData)
+   const msg = GenerateAuthMessage (signedData)
+
    const web3 = new Web3(env)
+
+   const accs = await env.request({ method: "eth_requestAccounts" }, config.connectOptions)
+
    let signature = ''
+
    try {
 
-      signature = await web3.eth.personal.sign(hash, accs[0], '')
+      signature = await web3.eth.personal.sign(msg, accs[0], '')
 
    } catch (e) {
       store.dispatch(actions.notify('savefail'))
       return false
    }
+
+   console.log({
+      signature: signature,
+      message: signedData,
+      data: newData
+    })
    
    const saveResult = await fetch(config.API_URL + '/admin/savedata', {
       method: "POST",
@@ -134,6 +144,7 @@ export async function DispatchData ( newData : keyList) {
       },
       body: JSON.stringify({
          signature: signature,
+         message: signedData,
          data: newData
        })
     })

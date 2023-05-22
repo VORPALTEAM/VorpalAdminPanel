@@ -37,7 +37,6 @@ const KeysTab = () => {
     return(
         <div className="admin--tab keys--tab">
             {State.keys.map((item) => {
-                console.log(item)
                 return <KeyRow _key={item._key} value={item.value} />
             })}
             <div className="append--row">
