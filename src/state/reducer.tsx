@@ -7,10 +7,12 @@ const actionNames = {
     notify: "NOTIFY",
     address: "ADDRESS",
     keys: "KEYS",
+    users: "USERS",
     deletions: "DELETIONS"
 }
 
 const processingKeys : types.keyList = []
+const users : types.userList = []
 const deletions : string[] = []
 
 export const actions = {
@@ -18,6 +20,7 @@ export const actions = {
     setAddress: createAction<string>(actionNames.address),
     notify: createAction<types.notifyNames>(actionNames.notify),
     keys: createAction<types.keyList>(actionNames.keys),
+    users: createAction<types.userList>(actionNames.users),
     deletions: createAction<string[]>(actionNames.deletions)
 }
 
@@ -57,6 +60,15 @@ const EditKeys = (state = processingKeys, action: types.keyListAction) => {
   }
 }
 
+const EditUsers = (state = users, action: types.userListAction) => {
+  switch(action.type) {
+    case actionNames.users : 
+      return action.payload
+    default :
+      return state
+  }
+}
+
 const UpdateDeletions = (state = deletions, action: types.stringArrAction) => {
   switch(action.type) {
     case actionNames.deletions : 
@@ -71,6 +83,7 @@ export const RootReducer = combineReducers ({
     notify: SelectNotify,
     address: SetAddress,
     keys: EditKeys,
+    users: EditUsers,
     deletions: UpdateDeletions
 })
 

@@ -14,7 +14,19 @@ export type keyItem = {
     value: string
 }
 
+export type userItem = {
+    address : string,
+    login : string,
+    rights : string
+}
+
 export type keyList = keyItem[]
+export type userList = userItem[]
+
+export type userListAction = {
+    type: string,
+    payload: userList
+}
 
 export type keyListAction = {
     type: string,

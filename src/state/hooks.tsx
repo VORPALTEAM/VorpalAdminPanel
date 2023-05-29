@@ -3,7 +3,7 @@ import * as config from '../config'
 import Web3 from 'web3';
 import { actions } from './reducer';
 import sha256 from 'sha256'
-import { keyList } from 'types';
+import { keyList, userItem, userList } from 'types';
 import { generateRandomString } from './utils';
 
 declare global {
@@ -56,6 +56,21 @@ async function CheckAuth (signature : string) {
     if (!response.data.success) {
         return false
     }
+
+    const userRequest = await fetch(config.API_URL + '/admin/getusers', {
+      method: "POST",
+      headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+         filter: "All",
+         signature:  signature
+       })
+    })
+    const userData = await userRequest.json()
+    const userContent : userList = []
+    console.log(userData)
     
     response.data.content.map((item) => {
       content.push({
@@ -63,8 +78,17 @@ async function CheckAuth (signature : string) {
          value: item.value
       })
     })
+
+    userData.data.content.map((item : userItem) => {
+       userContent.push({
+          address: item.address,
+          login: item.login,
+          rights: item.rights
+       })
+    })
      
     store.dispatch(actions.keys(content))
+    store.dispatch(actions.users(userContent))
 
     return response.data.success ? true : false
     // Request to api will be here
