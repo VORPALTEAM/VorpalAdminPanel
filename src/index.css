@@ -36,14 +36,12 @@
 }
 
 body {
-    background: #586755;
+    background: #525252;
     font-family: 'Roboto';
 }
 
 .App {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 20px;
 }
 
 .login--form {
@@ -95,14 +93,20 @@ body {
 }
 
 .cabinet {
-  padding-top: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: #F8F4F4;
 }
 
 .to--delete {
   background: #F00;
+}
+
+.menu--section {
+   display: flex;
+}
+
+.menu--inner {
+  display: flex;
+  margin: 5px;
 }
 
 

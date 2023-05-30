@@ -8,6 +8,7 @@ const actionNames = {
     address: "ADDRESS",
     keys: "KEYS",
     users: "USERS",
+    menu: "MENU",
     deletions: "DELETIONS"
 }
 
@@ -18,6 +19,7 @@ const deletions : string[] = []
 export const actions = {
     setIsAuth: createAction<boolean>(actionNames.auth),
     setAddress: createAction<string>(actionNames.address),
+    switchTab: createAction<string>(actionNames.menu),
     notify: createAction<types.notifyNames>(actionNames.notify),
     keys: createAction<types.keyList>(actionNames.keys),
     users: createAction<types.userList>(actionNames.users),
@@ -78,12 +80,22 @@ const UpdateDeletions = (state = deletions, action: types.stringArrAction) => {
   }
 }
 
+const SwitchTab = (state = "content", action: types.stringAction) => {
+  switch(action.type) {
+    case actionNames.menu : 
+      return action.payload
+    default :
+      return state
+  }
+}
+
 export const RootReducer = combineReducers ({
     isAuth: SetIsAuth,
     notify: SelectNotify,
     address: SetAddress,
     keys: EditKeys,
     users: EditUsers,
+    tab: SwitchTab,
     deletions: UpdateDeletions
 })
 
