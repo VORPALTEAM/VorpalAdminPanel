@@ -49,10 +49,10 @@ const KeyRow = ( pair : keyItem ) => {
             <div className="val--key">
                {pair._key}
             </div>
-            <input type="text" value={pair.value} onChange={UpdateValue} />
-            <button onClick={MarkToDeleteKey}>
-                Delete
-            </button>
+            <input className="row--item" type="text" value={pair.value} onChange={UpdateValue} />
+            <div className="row--item del--key--btn" onClick={MarkToDeleteKey}>
+                <img src="images/minus.png" />
+            </div>
         </div>
     )
 }

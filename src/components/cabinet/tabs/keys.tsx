@@ -20,6 +20,9 @@ const KeysTab = () => {
     }
 
     const AppendKey = () => {
+        if (additionalName === "") {
+            return;
+        }
         const newList : keyList = []
         State.keys.map((k) => {
             newList.push(k)
@@ -44,13 +47,13 @@ const KeysTab = () => {
                 return <KeyRow key={`rw_`.concat(String(index * 3))} _key={item._key} value={item.value} />
             })}
             <div className="append--row">
-                <input type="text" value={additionalName} onChange={NewKeyName} />
-                <button onClick={AppendKey}>
-                    Append key
-                </button>
+                <input className="" type="text" value={additionalName} onChange={NewKeyName} />
+                <div className="row--item" onClick={AppendKey}>
+                    <img src="images/plus.png" />
+                </div>
             </div>
             <div className="save--data--row">
-                <button className="save--btn" onClick={SaveData}>
+                <button className="save--btn save--keys--btn" onClick={SaveData}>
                     Save
                 </button>
             </div>

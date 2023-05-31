@@ -20,6 +20,22 @@ export type userItem = {
     rights : string
 }
 
+export type subMenuItem = {
+    name: string,
+    url: string
+}
+
+export type subMenu = subMenuItem[]
+
+export type menuItem = {
+    name: string,
+    url: string,
+    style: string,
+    submenu: subMenuItem[]
+}
+
+export type menu = menuItem[]
+
 export type keyList = keyItem[]
 export type userList = userItem[]
 

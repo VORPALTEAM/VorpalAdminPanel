@@ -10,6 +10,12 @@ export const tabs = {
     menu: "menu"
 }
 
+export const menuStyles = {
+    default: "default",
+    sale: "sale",
+    starmap: "starmap"
+}
+
 export const testAdminKeys : string[] = [
     "0x0779ffa4ea4b23260065ddcb10f4d88be9e29a32",
     "0x952659fe47b9ae12aed206f3ffadcaa4c3659589"

@@ -40,6 +40,12 @@ body {
     font-family: 'Roboto';
 }
 
+input, select, option {
+  background: #D9D9D9;
+  min-height: 32px;
+  font-size: 16px;
+}
+
 .App {
     padding: 20px;
 }
@@ -98,7 +104,11 @@ body {
   cursor: pointer;
 }
 
-.cabinet {
+.single--menu--edit {
+  display: flex;
+}
+
+.cabinet--tabs {
   background: #F8F4F4;
 }
 
@@ -130,6 +140,59 @@ body {
 
 .menu--logo {
   padding: 16px;
+}
+
+.admin--tab,
+.menu--editor--inner {
+  padding: 20px 20px 20px 64px;
+}
+
+.key--row {
+   display: flex;
+   margin-top: 20px
+}
+
+.row--item {
+  margin-left: 20px;
+}
+
+.val--key {
+  min-width: 200px;
+  font-size: 18px;
+}
+
+.del--key--btn {
+   margin-top: 3px;
+   cursor: pointer;
+}
+
+.append--row {
+  display: flex;
+  margin-top: 20px;
+}
+
+.save--btn {
+  margin-top: 20px;
+  width: 210px;
+  height: 54px;
+  font-size: 24px;
+  border: none;
+  background: #4BC99B;
+  cursor: pointer;
+}
+
+.save--btn:hover,
+.save--btn:focus {
+  background: #7BDDBA;
+}
+
+.del--key--btn img {
+  width: 32px;
+  height: 32px;
+}
+
+.single--menu--edit {
+  margin-bottom: 20px;
 }
 
 
