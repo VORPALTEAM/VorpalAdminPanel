@@ -6,8 +6,10 @@ import { AuthUser } from 'state/hooks';
 const LoginForm = () => {
 
     return(
-        <div className="login--form" onClick={AuthUser}>
-            Login with wallet
+        <div className="login--container">
+            <div className="login--form" onClick={AuthUser}>
+                Login with wallet
+            </div>
         </div>
     )
 }

@@ -4,6 +4,7 @@ import { RootState, actions } from 'state/reducer';
 import KeyRow from './components/keyrow';
 import { keyList } from 'types';
 import { DispatchData } from 'state/hooks';
+import { tabs } from 'config';
 
 const KeysTab = () => {
 
@@ -37,6 +38,9 @@ const KeysTab = () => {
     return(
         <div className="admin--tab keys--tab">
             {State.keys.map((item, index) => {
+                if (item._key === tabs.menu) {
+                    return null
+                }
                 return <KeyRow key={`rw_`.concat(String(index * 3))} _key={item._key} value={item.value} />
             })}
             <div className="append--row">

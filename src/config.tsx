@@ -4,6 +4,12 @@ export const API_URL = process.env.API_URL || "https://staging-api.vorpal.financ
 
 export const NOTIFY_LIFETIME = 6000
 
+export const tabs = {
+    users: "users",
+    content: "content",
+    menu: "menu"
+}
+
 export const testAdminKeys : string[] = [
     "0x0779ffa4ea4b23260065ddcb10f4d88be9e29a32",
     "0x952659fe47b9ae12aed206f3ffadcaa4c3659589"

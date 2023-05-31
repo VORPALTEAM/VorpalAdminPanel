@@ -4,6 +4,8 @@ import UsersTab from './tabs/users';
 import KeysTab from './tabs/keys';
 import Menu from './menu';
 import { RootState } from 'state/reducer';
+import MenuEditor from './tabs/menuedit';
+import { tabs } from 'config';
 
 
 const Cabinet = () => {
@@ -20,8 +22,9 @@ const Cabinet = () => {
             </div>
             <div className="cabinet--content">
                 <div className="cabinet--tabs">
-                    <KeysTab />
-                    <UsersTab />
+                    {State.tab === tabs.content ? <KeysTab /> : null}
+                    {State.tab === tabs.menu ? <MenuEditor /> : null}
+                    {State.tab === tabs.users ? <UsersTab /> : null}
                 </div>
             </div>
         </div>

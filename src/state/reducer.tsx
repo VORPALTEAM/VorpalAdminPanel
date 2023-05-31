@@ -1,5 +1,6 @@
 import { createReducer, createAction, combineReducers } from '@reduxjs/toolkit';
 import * as config from 'config'
+import { tabs } from 'config';
 import * as types from 'types'
 
 const actionNames = {
@@ -80,7 +81,7 @@ const UpdateDeletions = (state = deletions, action: types.stringArrAction) => {
   }
 }
 
-const SwitchTab = (state = "content", action: types.stringAction) => {
+const SwitchTab = (state = tabs.content, action: types.stringAction) => {
   switch(action.type) {
     case actionNames.menu : 
       return action.payload
