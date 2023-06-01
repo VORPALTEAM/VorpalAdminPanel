@@ -10,9 +10,16 @@ const MenuEditor = () => {
         return state
      })
     const dispatch = useDispatch()
+    const defaultItem : menuItem = {
+        name: "",
+        url: "",
+        style: "default",
+        submenu: []
+    }
     const [isDataloaded, markLoading] = useState(false)
     const [selectedTabIndex, selectTabForEdit] = useState<number>(0)
     const [menu, updateMenu] = useState<menu>([])
+    const [newItem, updateNewItem] = useState<menuItem>(defaultItem)
 
 
     const menuItems = () => {
@@ -75,6 +82,57 @@ const MenuEditor = () => {
         updateMenu(updMenu)
     }
 
+    const UpdateCreationItem = (event) => {
+        const field = event.target.dataset.var
+        const newVal = event.target.value 
+        let updItem : menuItem = defaultItem
+        if (field === "name") {
+            updItem = {
+                name: newVal,
+                url: newItem.url,
+                style: newItem.style,
+                submenu: []
+            }
+        }
+        if (field === "url") {
+            updItem = {
+                name: newItem.name,
+                url: newVal,
+                style: newItem.style,
+                submenu: []
+            }
+        }
+        if (field === "style") {
+            updItem = {
+                name: newItem.name,
+                url: newItem.url,
+                style: newVal,
+                submenu: []
+            }
+        }
+        updateNewItem(updItem)
+    }
+
+    const AppendMenuItem = () => {
+        if (newItem.name === defaultItem.name) {
+            return;
+        }
+        const newManue = menu
+        newManue.push(newItem)
+        updateNewItem(defaultItem)
+    }
+
+    const DeleteMenuItem = (event) => {
+        const updMenu : menu = []
+        const elem : number = event.target.dataset.index 
+        menu.forEach((item : menuItem, ind : number) => {
+            if (Number(ind) !== Number(elem)) {
+                updMenu.push(item)
+            }
+        })
+        updateMenu(updMenu)
+    }
+
     return(
         <div className="menu--editor">
             <div className="menu--editor--inner">
@@ -100,7 +158,7 @@ const MenuEditor = () => {
                                 </select>
                             </div>
                             <div className="txt--edit row--item del--key--btn">
-                                <img src="images/minus.png" />
+                                <img src="images/minus.png" data-index={index} onClick={DeleteMenuItem} />
                             </div>
                             <div className="txt--edit row--item del--key--btn submenu--burger">
                                 <img src={selectedTabIndex === index ? "images/b_active.png" : "images/burger.png" }/>
@@ -108,6 +166,35 @@ const MenuEditor = () => {
                         </div>
                     )
                 })}
+                <div className="single--menu--edit menu--item--add--row">
+                    <div className="txt--edit">
+                                <input type="text" data-var="name" 
+                                placeholder="name"
+                                value = {newItem.name}
+                                onChange={UpdateCreationItem}
+                                />
+                    </div>
+                    <div className="txt--edit row--item">
+                                <input type="text" data-var="url" 
+                                placeholder="url"
+                                value = {newItem.url}
+                                onChange={UpdateCreationItem}
+                                />
+                    </div>
+                    <div className="txt--edit row--item">
+                            <select data-var="style" onChange={UpdateCreationItem}>
+                                 <option value={menuStyles.default}
+                                   selected={newItem.style === menuStyles.default ? true : false}>{menuStyles.default}</option>
+                                 <option value={menuStyles.sale} 
+                                 selected={newItem.style === menuStyles.sale ? true : false}>{menuStyles.sale}</option>
+                                 <option value={menuStyles.starmap}
+                                 selected={newItem.style === menuStyles.starmap ? true : false}>{menuStyles.starmap}</option>
+                            </select>
+                    </div>
+                    <div className="row--item" onClick={AppendMenuItem}>
+                        <img src="images/plus.png" />
+                    </div>
+                </div>
             </div>
         </div>
     )
