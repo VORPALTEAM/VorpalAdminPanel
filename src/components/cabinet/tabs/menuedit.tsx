@@ -1,8 +1,9 @@
 import { menuStyles, tabs } from 'config';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { DispatchData } from 'state/hooks';
 import { RootState, actions } from 'state/reducer';
-import { keyItem, menu, menuItem } from 'types';
+import { keyItem, keyList, menu, menuItem, subMenuItem } from 'types';
 
 const MenuEditor = () => {
 
@@ -16,10 +17,15 @@ const MenuEditor = () => {
         style: "default",
         submenu: []
     }
+    const defaultSubItem : subMenuItem = {
+        name: "",
+        url: ""
+    }
     const [isDataloaded, markLoading] = useState(false)
     const [selectedTabIndex, selectTabForEdit] = useState<number>(0)
     const [menu, updateMenu] = useState<menu>([])
     const [newItem, updateNewItem] = useState<menuItem>(defaultItem)
+    const [newSubItem, updateNewSubItem] = useState<subMenuItem>(defaultSubItem)
 
 
     const menuItems = () => {
@@ -82,6 +88,112 @@ const MenuEditor = () => {
         updateMenu(updMenu)
     }
 
+    const UpdateCreationSubItem = (event) => {
+        const field = event.target.dataset.var
+        const newVal = event.target.value 
+        let updItem : subMenuItem = defaultSubItem
+        if (field === "name") {
+            updItem = {
+                name: newVal,
+                url: newSubItem.url
+            }
+        }
+        if (field === "url") {
+            updItem = {
+                name: newSubItem.name,
+                url: newVal
+            }
+        }
+        updateNewSubItem(updItem)
+    }
+
+    const AppendMenuSubItem = (event) => {
+        if (newSubItem.name === defaultSubItem.name)  {
+            return;
+        }
+        const elem : number = event.target.dataset.index 
+        const val = event.target.value 
+        const field = event.target.dataset.var 
+        const updMenu : menu = []
+        menu.forEach((item : menuItem, ind : number) => {
+            if (Number(ind) !== Number(elem)) {
+                updMenu.push(item)
+            } else {
+              const newSubMenu : subMenuItem[] = item.submenu
+              newSubMenu.push(newSubItem)
+              updMenu.push({
+                 name: item.name,
+                 url: item.url,
+                 style: item.style,
+                 submenu: newSubMenu
+              })
+            }
+        })
+        updateMenu(updMenu)
+        updateNewSubItem(defaultSubItem)
+    }
+
+    const UpdateSubMenuValue = (event) => {
+        const val = event.target.value 
+        const elem : number = event.target.dataset.index 
+        const subelem : number = event.target.dataset.subindex 
+        const field = event.target.dataset.var 
+        const updMenu : menu = []
+        menu.forEach((item : menuItem, ind : number) => {
+            if (Number(ind) !== Number(elem)) {
+                updMenu.push(item)
+            } else {
+                const newSubMenu : subMenuItem[] = []
+                item.submenu.forEach((subitem : subMenuItem, subind: number) => {
+                    if (Number(subind) !== Number(subelem)) {
+                        newSubMenu.push(subitem)
+                    } else {
+                        const newItem : subMenuItem = (field === "name") ? {
+                            name: val,
+                            url: subitem.url
+                        } : {
+                            name: subitem.name,
+                            url: val
+                        }
+                        newSubMenu.push(newItem)
+                    }
+                })
+                updMenu.push({
+                    name: item.name,
+                    url: item.url,
+                    style: item.style,
+                    submenu: newSubMenu
+                })
+            }
+        })
+        updateMenu(updMenu)
+    }
+
+    const DeleteSubMenuItem = (event) => {
+        const elem : number = event.target.dataset.index 
+        const subelem : number = event.target.dataset.subindex 
+        const updMenu : menu = []
+        menu.forEach((item : menuItem, ind : number) => {
+            if (Number(ind) !== Number(elem)) {
+                updMenu.push(item)
+            } else {
+                const newSubMenu : subMenuItem[] = []
+                item.submenu.forEach((subitem : subMenuItem, subind: number) => {
+                    if (Number(subind) !== Number(subelem)) {
+                        newSubMenu.push(subitem)
+                    } 
+                })
+                updMenu.push({
+                    name: item.name,
+                    url: item.url,
+                    style: item.style,
+                    submenu: newSubMenu
+                })
+            }
+        })
+        updateMenu(updMenu)
+    }
+
     const UpdateCreationItem = (event) => {
         const field = event.target.dataset.var
         const newVal = event.target.value 
@@ -122,6 +234,11 @@ const MenuEditor = () => {
         updateNewItem(defaultItem)
     }
 
+    const SwitchActiveTab = (event) => {
+        const activeIndex : number = Number(event.target.dataset.index) 
+        selectTabForEdit(activeIndex)
+    }
+
     const DeleteMenuItem = (event) => {
         const updMenu : menu = []
         const elem : number = event.target.dataset.index 
@@ -131,6 +248,22 @@ const MenuEditor = () => {
             }
         })
         updateMenu(updMenu)
+    }
+
+    const SaveData = () => {
+        const currentData : keyList = []
+        State.keys.forEach((item: keyItem) => {
+            if (item._key !== "menu") {
+                currentData.push(item)
+            } else {
+                currentData.push({
+                    _key: "menu",
+                    value: JSON.stringify(menu)
+                })
+            }
+        })
+        dispatch(actions.keys(currentData))
+        DispatchData(currentData, State.deletions)
     }
 
     return(
@@ -161,7 +294,68 @@ const MenuEditor = () => {
                                 <img src="images/minus.png" data-index={index} onClick={DeleteMenuItem} />
                             </div>
                             <div className="txt--edit row--item del--key--btn submenu--burger">
-                                <img src={selectedTabIndex === index ? "images/b_active.png" : "images/burger.png" }/>
+                                <img src={selectedTabIndex === index ? "images/b_active.png" : "images/burger.png" } 
+                                data-index={index}
+                                onClick={SwitchActiveTab} />
+                            </div>
+                            <div className={`submenu--edit--container${selectedTabIndex === index ? " ctnr--active" : ""}`}>
+                                <div className="subitem--add--row" style={{
+                                    position: 'absolute',
+                                    marginTop: -60 * index,
+                                    marginLeft: 20
+                                }}>
+                                    {item.submenu.map((subitem, s_index) => {
+                                           return(
+                                            <div  className="single--menu--edit">
+                                              <div className="txt--edit">
+                                                <input type="text" 
+                                                data-index={index} 
+                                                data-subindex={s_index}
+                                                data-var="name" 
+                                                 value={subitem.name} onChange={UpdateSubMenuValue} />
+                                              </div>
+                                              <div className="txt--edit row--item">
+                                                <input type="text" 
+                                                  data-index={index} 
+                                                  data-subindex={s_index}
+                                                  data-var="url" 
+                                                  value={subitem.url} onChange={UpdateSubMenuValue} />
+                                              </div>
+                                              <div className="txt--edit row--item del--key--btn">
+                                                 <img src="images/minus.png" 
+                                                 data-index={index} 
+                                                 data-subindex={s_index}
+                                                 onClick={DeleteSubMenuItem} />
+                                              </div>
+                                            </div>
+                                           )
+                                    })}
+                                    <div className="single--menu--edit menu--item--add--row">
+                                      <div className="txt--edit">
+                                          <input type="text" data-var="name" 
+                                            placeholder="name"
+                                            data-index={index}
+                                            value = {newSubItem.name}
+                                            onChange={UpdateCreationSubItem}
+                                           />
+                                      </div>
+                                      <div className="txt--edit row--item">
+                                          <input type="text" 
+                                            data-var="url" 
+                                            data-index={index}
+                                            placeholder="url"
+                                            value = {newSubItem.url}
+                                            onChange={UpdateCreationSubItem}
+                                          />
+                                      </div>
+                                      <div className="row--item" >
+                                          <img src="images/plus.png" 
+                                          data-index={index}
+                                          onClick={AppendMenuSubItem}
+                                          />
+                                      </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )
@@ -194,6 +388,11 @@ const MenuEditor = () => {
                     <div className="row--item" onClick={AppendMenuItem}>
                         <img src="images/plus.png" />
                     </div>
+                </div>
+                <div className="save--data--row">
+                  <button className="save--btn save--keys--btn" onClick={SaveData}>
+                     Save
+                  </button>
                 </div>
             </div>
         </div>

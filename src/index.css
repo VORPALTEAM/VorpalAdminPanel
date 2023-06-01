@@ -145,6 +145,7 @@ input, select, option {
 .admin--tab,
 .menu--editor--inner {
   padding: 20px 20px 20px 64px;
+  min-height: 500px;
 }
 
 .key--row {
@@ -193,6 +194,14 @@ input, select, option {
 
 .single--menu--edit {
   margin-bottom: 20px;
+}
+
+.submenu--edit--container {
+   display: none;
+}
+
+.ctnr--active {
+   display: block;
 }
 
 
