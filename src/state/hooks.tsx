@@ -150,7 +150,7 @@ export async function DispatchData ( newData : keyList, dels: string[]) {
    let signature = ''
 
    try {
-      console.log(msg)
+
       signature = await web3.eth.personal.sign(msg, accs[0], '')
 
    } catch (e) {
@@ -178,7 +178,7 @@ export async function DispatchData ( newData : keyList, dels: string[]) {
        })
     })
    const result = await saveResult.json()
-   console.log(result)
+
    if (result.data.success) {
       store.dispatch(actions.notify('saveok'))
       return true
@@ -203,22 +203,12 @@ export async function DispatchUsers ( userData : userList, dels: string[] ) {
    let signature = ''
 
    try {
-      console.log(msg)
       signature = await web3.eth.personal.sign(msg, accs[0], '')
 
    } catch (e) {
       store.dispatch(actions.notify('savefail'))
       return false
    }
-
-   console.log({
-      signature: signature,
-      message: signedData,
-      data: {
-          users: userData,
-          deletions: dels
-      },}
-    )
 
    const saveResult = await fetch(config.API_URL + '/admin/updateusers', {
       method: "POST",
