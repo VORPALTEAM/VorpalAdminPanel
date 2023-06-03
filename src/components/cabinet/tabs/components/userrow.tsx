@@ -13,7 +13,7 @@ const UserRow = ( pair : userItem ) => {
 
     const MarkToDeleteKey = (event : any) => {
         const dels : string[] = []
-        State.deletions.forEach((item) => {
+        State.userDeletions.forEach((item) => {
             if (item !== pair.address) {
                 dels.push(item)
             }
@@ -24,24 +24,49 @@ const UserRow = ( pair : userItem ) => {
         } else {
             MarkToDelete(false)
         }
-        dispatch(actions.deletions(dels))
-        console.log(State.deletions)
+        dispatch(actions.userDeletions(dels))
+    }
+
+    const UpdateValue = (event : any) => {
+        const field = event.target.dataset.field 
+        const newVal = event.target.value 
+        const newUserData : userList = []
+
+        State.users.forEach((user) => {
+            if (user.address !== pair.address) {
+                newUserData.push(user)
+            } else {
+                if (field === "login") {
+                    const updUser : userItem = {
+                        address: pair.address,
+                        login: newVal,
+                        rights: pair.rights
+                    }
+                    newUserData.push(updUser)
+                }
+                if (field === "rights") {
+                    const updUser : userItem = {
+                        address: pair.address,
+                        login: pair.login,
+                        rights: newVal
+                    }
+                    newUserData.push(updUser)
+                }
+            }
+        })
+        dispatch(actions.users(newUserData))
     }
 
     return(
         <div className={`key--row${toDelete ? " to--delete" : ""}`}>
-            <div className="user--address">
+            <div className="val--key user--address">
                {pair.address}
             </div>
-            <div className="user--login">
-               {pair.login}
+            <input className="row--item" type="text" data-field="login" value={pair.login} onChange={UpdateValue} />
+            <input className="row--item" type="text" data-field="rights" value={pair.rights} onChange={UpdateValue} />
+            <div className="row--item del--key--btn" onClick={MarkToDeleteKey}>
+                <img src="images/minus.png" />
             </div>
-            <div className="user--rights">
-               {pair.rights}
-            </div>
-            <button onClick={MarkToDeleteKey}>
-                Delete
-            </button>
         </div>
     )
 }

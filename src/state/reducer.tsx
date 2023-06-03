@@ -10,7 +10,8 @@ const actionNames = {
     keys: "KEYS",
     users: "USERS",
     menu: "MENU",
-    deletions: "DELETIONS"
+    deletions: "DELETIONS",
+    userDeletions: "USER_DELETIONS"
 }
 
 const processingKeys : types.keyList = []
@@ -24,7 +25,8 @@ export const actions = {
     notify: createAction<types.notifyNames>(actionNames.notify),
     keys: createAction<types.keyList>(actionNames.keys),
     users: createAction<types.userList>(actionNames.users),
-    deletions: createAction<string[]>(actionNames.deletions)
+    deletions: createAction<string[]>(actionNames.deletions),
+    userDeletions: createAction<string[]>(actionNames.userDeletions)
 }
 
 const SetIsAuth = (state = false, action: types.booleanAction) => {
@@ -81,6 +83,15 @@ const UpdateDeletions = (state = deletions, action: types.stringArrAction) => {
   }
 }
 
+const UpdateUserDeletions = (state = deletions, action: types.stringArrAction) => {
+  switch(action.type) {
+    case actionNames.userDeletions : 
+      return action.payload
+    default :
+      return state
+  }
+}
+
 const SwitchTab = (state = tabs.content, action: types.stringAction) => {
   switch(action.type) {
     case actionNames.menu : 
@@ -97,7 +108,8 @@ export const RootReducer = combineReducers ({
     keys: EditKeys,
     users: EditUsers,
     tab: SwitchTab,
-    deletions: UpdateDeletions
+    deletions: UpdateDeletions,
+    userDeletions: UpdateUserDeletions 
 })
 
 export type RootState = ReturnType<typeof RootReducer>

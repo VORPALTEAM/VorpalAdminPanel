@@ -187,3 +187,60 @@ export async function DispatchData ( newData : keyList, dels: string[]) {
       return false
    }
 }
+
+export async function DispatchUsers ( userData : userList, dels: string[] ) {
+   if (!env) {
+      return false
+   }
+
+   const signedData =  generateRandomString (16)
+   const msg = GenerateAuthMessage (signedData)
+
+   const web3 = new Web3(env)
+
+   const accs = await env.request({ method: "eth_requestAccounts" }, config.connectOptions)
+
+   let signature = ''
+
+   try {
+      console.log(msg)
+      signature = await web3.eth.personal.sign(msg, accs[0], '')
+
+   } catch (e) {
+      store.dispatch(actions.notify('savefail'))
+      return false
+   }
+
+   console.log({
+      signature: signature,
+      message: signedData,
+      data: {
+          users: userData,
+          deletions: dels
+      },}
+    )
+
+   const saveResult = await fetch(config.API_URL + '/admin/updateusers', {
+      method: "POST",
+      headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+         signature: signature,
+         message: signedData,
+         data: {
+             users: userData,
+             deletions: dels
+         },
+       })
+    })
+    const result = await saveResult.json()
+    console.log(result)
+    if (JSON.stringify(result).indexOf('false') < 0) {
+      store.dispatch(actions.notify('saveok'))
+      return true
+    } else {
+      return false
+    }
+}

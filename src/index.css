@@ -204,5 +204,9 @@ input, select, option {
    display: block;
 }
 
+.address--row {
+  min-width: 405px;
+}
+
 
 
